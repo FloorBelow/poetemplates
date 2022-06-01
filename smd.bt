@@ -11,17 +11,23 @@
 //   History: 
 //------------------------------------------------
 byte version;
-if(version != 3) {
-uint triCount;
-uint vertCount;
+if(version == 3) {
+    byte four;
+    ushort shapeCount;
+    byte unk[41];
+    uint triCount;
+    uint vertCount;
+    ulong unk2;
+    ulong shapeInfo[shapeCount];
+} else {
+    uint triCount;
+    uint vertCount;
+    byte four;
+    ushort shapeCount;
+    uint shapeNamesLength;
+    float bbox[6];
+    char shapeNames[shapeNamesLength];
 }
-
-byte four;
-ushort shapes;
-uint shapeNameLength;
-float bbox[6];
-uint64 shapeInfo[shapes];
-char shapeNames[shapeNameLength];
 
 if(triCount < 65535) {
     ushort idx[triCount * 3] <bgcolor=cDkAqua>;
