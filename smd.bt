@@ -17,8 +17,8 @@ if(version == 3) {
     byte unk[41];
     uint triCount;
     uint vertCount;
-    ulong unk2;
-    ulong shapeInfo[shapeCount];
+    uint64 unk2;
+    uint64 shapeInfo[shapeCount];
 } else {
     uint triCount;
     uint vertCount;
@@ -26,10 +26,12 @@ if(version == 3) {
     ushort shapeCount;
     uint shapeNamesLength;
     float bbox[6];
+    uint64 shapeInfo[shapeCount];
+    if(version == 2) uint unk;
     char shapeNames[shapeNamesLength];
 }
 
-if(triCount < 65535) {
+if(vertCount < 65535) {
     ushort idx[triCount * 3] <bgcolor=cDkAqua>;
 } else {
     uint idx[triCount * 3] <bgcolor=cDkAqua>;
