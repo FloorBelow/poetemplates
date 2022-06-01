@@ -1,0 +1,10 @@
+struct {
+    byte[25];
+    uint numConnects;
+    uint numVerts;
+    uint numIdx;
+    uint numUnk;
+    uint numGroundVerts;
+    uint numGroundIdx;
+    byte flags;
+};

@@ -1,0 +1,37 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+byte version;
+if(version != 3) {
+uint triCount;
+uint vertCount;
+}
+
+byte four;
+ushort shapes;
+uint shapeNameLength;
+float bbox[6];
+uint64 shapeInfo[shapes];
+char shapeNames[shapeNameLength];
+
+if(triCount < 65535) {
+    ushort idx[triCount * 3] <bgcolor=cDkAqua>;
+} else {
+    uint idx[triCount * 3] <bgcolor=cDkAqua>;
+}
+
+struct {
+    float pos[3] <bgcolor=cDkRed>;
+    uint64 unk1;
+    uint uv <bgcolor=cDkGreen>;
+    uint64 unk2;
+} verts[vertCount];

@@ -1,0 +1,72 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+byte version;
+
+if(version == 9) {
+
+int unk;
+short unk;
+float bbox[6] <bgcolor=cDkRed>;
+char magicmebbe[4] <bgcolor=cBlack>;
+short count1;
+byte count2;
+short shapeCount <bgcolor=cBlue>;
+int unk1;
+int triCount <bgcolor=cBlue>;
+int vertCountQ <bgcolor=cBlue>;
+int unk4;
+int unk5;
+struct {
+    int idxOffset;
+    int idxCount;
+} shapes[shapeCount] <bgcolor=cGreen>;
+//Assert(idxCount == triCount * 3);
+
+
+} else {
+
+int triCount <bgcolor=cBlue>;
+int vertCountQ <bgcolor=cBlue>;
+short shapeCount <bgcolor=cBlue>;
+int unk;
+float bbox[6] <bgcolor=cDkRed>;
+
+if(version == 8) {
+    int unk2;
+};
+
+struct {
+    int a;
+    int b;
+    int c;
+} shapes[shapeCount];
+
+
+
+
+
+}
+
+local uint idxCount = triCount * 3;
+
+//if(triCount > 21844) uint idx[triCount*3] <bgcolor=cDkAqua>;
+ushort idx[triCount*3] <bgcolor=cDkAqua>;
+
+struct {
+    float x <bgcolor=cDkRed>;
+    float y <bgcolor=cDkRed>;
+    float z <bgcolor=cDkRed>;
+    uint64 unk;
+    hfloat u <bgcolor=cDkYellow>;
+    hfloat v <bgcolor=cDkYellow>;
+} verts[vertCountQ];

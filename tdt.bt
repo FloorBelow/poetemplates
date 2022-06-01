@@ -1,0 +1,29 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+typedef struct {
+    wstring s;
+} Str <read=strRead>;
+
+string strRead( Str &s ) {
+    return s.s;
+};
+
+int version;
+int strChars;
+local long offset = FTell() + strChars * 2;
+while(FTell() < offset)
+    Str strings;
+int z1;
+int unk1;
+int unk2;
