@@ -56,16 +56,31 @@ string JointRead(Joint& joint) {
 }
 
 typedef struct (int version){
+    byte nameLength;
+    byte unk[55];
+    if(version > 8) int unk2;
+    char name[nameLength] <bgcolor=cDkYellow>;
+}Light <read=LightRead>;
+
+string LightRead(Light& light) {
+    return light.name;
+}
+
+
+typedef struct (int version){
     byte unk[4];
     if(version == 11) {
         byte unk3;
     }
     byte nameLength;
-    byte unk2[8];
     if(version == 11) {
-        byte unk4;
+        byte parentNameLength;
     }
+    byte unk2[8];
     char name[nameLength] <bgcolor=cDkAqua>;
+    if(version == 11) {
+        char parentName[parentNameLength] <bgcolor=cAqua>;
+    }
 }Animation <read=AnimationRead>;
 
 string AnimationRead(Animation& animation) {
@@ -75,13 +90,16 @@ string AnimationRead(Animation& animation) {
 
 
 byte version;
-byte jointCount;
+ubyte jointCount;
 byte unk1;
 byte animationCount;
-byte unk2[4];
+byte unk2[3];
+byte lightCount;
 
 struct {
     Joint joints[jointCount] <optimize=false>;
 } joints;
+
+Light lights(version)[lightCount] <optimize=false>;
 
 Animation animations(version)[animationCount] <optimize=false>;
