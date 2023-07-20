@@ -17,16 +17,22 @@ if(version == 3) {
     byte unk[41];
     uint triCount;
     uint vertCount;
-    uint64 unk2;
-    uint64 shapeInfo[shapeCount];
-} else {
+    //uint64 unk2;
+    struct {
+        uint start;
+        uint length;
+    }shapes[shapeCount];} 
+else {
     uint triCount;
     uint vertCount;
     byte four;
     ushort shapeCount;
     uint shapeNamesLength;
     float bbox[6];
-    uint64 shapeInfo[shapeCount];
+    struct {
+        uint start;
+        uint length;
+    }shapes[shapeCount];
     if(version == 2) uint unk;
     char shapeNames[shapeNamesLength];
 }
@@ -41,5 +47,13 @@ struct {
     float pos[3] <bgcolor=cDkRed>;
     uint64 unk1;
     uint uv <bgcolor=cDkGreen>;
-    uint64 unk2;
+    uint64 unk2 <bgcolor=cDkAqua>;
 } verts[vertCount];
+
+uint shapeNameLengths[shapeCount];
+local int i;
+for(i = 0; i < shapeCount; i++) {
+    struct {
+        char name[shapeNameLengths[i]];
+    } shapeNames;
+}
