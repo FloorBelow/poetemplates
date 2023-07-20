@@ -1,0 +1,87 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+
+
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+}vec3 <read=vec3Read>;
+
+string vec3Read(vec3& v) {
+    string str;
+    SPrintf(str, "%f %f %f  (%f)", v.x, v.y, v.z, Sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
+    return str;
+}
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float w;
+}vec4 <read=vec4Read>;
+
+string vec4Read(vec4& v) {
+    string str;
+    SPrintf(str, "%f %f %f %f", v.x, v.y, v.z, v.w);
+    return str;
+}
+
+
+typedef struct {
+    short unk1;
+    vec4 a;
+    vec4 b;
+    vec4 c;
+    vec4 d;
+    byte nameLength;
+    byte unkasdas;
+    char name[nameLength] <bgcolor=cDkGreen>;
+}Joint <read=JointRead>;
+
+string JointRead(Joint& joint) {
+    return joint.name;
+}
+
+typedef struct (int version){
+    byte unk[4];
+    if(version == 11) {
+        byte unk3;
+    }
+    byte nameLength;
+    byte unk2[8];
+    if(version == 11) {
+        byte unk4;
+    }
+    char name[nameLength] <bgcolor=cDkAqua>;
+}Animation <read=AnimationRead>;
+
+string AnimationRead(Animation& animation) {
+    return animation.name;
+}
+
+
+
+byte version;
+byte jointCount;
+byte unk1;
+byte animationCount;
+byte unk2[4];
+
+struct {
+    Joint joints[jointCount] <optimize=false>;
+} joints;
+
+Animation animations(version)[animationCount] <optimize=false>;
