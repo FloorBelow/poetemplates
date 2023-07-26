@@ -1,10 +1,135 @@
-struct {
-    byte[25];
-    uint numConnects;
-    uint numVerts;
-    uint numIdx;
-    uint numUnk;
-    uint numGroundVerts;
-    uint numGroundIdx;
-    byte flags;
+typedef struct (byte version){
+    float x <bgcolor=cDkGreen>;
+    float y <bgcolor=cDkGreen>;
+    float z <bgcolor=cDkGreen>;
+    int unka;
+    if(version < 9) int unkb;
+    hfloat u <bgcolor=cDkBlue>;
+    hfloat v <bgcolor=cDkBlue>;
+} Vert20 <read=Vert20Read>;
+
+string Vert20Read(Vert20& v) {
+    string s;
+    SPrintf(s, "%4.0f %4.0f %4.0f    (%.2f %1.2f)", v.x, v.y, v.z, v.u, v.v);
+    return s;
+}
+    
+
+typedef struct {
+    float x <bgcolor=cDkGreen>;
+    float y <bgcolor=cDkGreen>;
+    float z <bgcolor=cDkGreen>;
+    short a;
+    short b;
+    short c;
+    short d;
+    short e;
+    short f;
+} Vert24 <read=Vert24Read>;
+
+string Vert24Read(Vert24& v) {
+    string s;
+    SPrintf(s, "%4.0f %4.0f %4.0f", v.x, v.y, v.z);
+    return s;
+}
+
+typedef struct {
+    float x <bgcolor=cDkGreen>;
+    float y <bgcolor=cDkGreen>;
+    float z <bgcolor=cDkGreen>;
+    short a;
+    short b;
+    short c;
+    short d;
+    short e;
+    short f;
+    int unk;
+} Vert28 <read=Vert28Read>;
+
+string Vert28Read(Vert28& v) {
+    string s;
+    SPrintf(s, "%4.0f %4.0f %4.0f", v.x, v.y, v.z);
+    return s;
+}
+
+
+struct Mesh(int format, int triCount, int vertCount, int fsCount) {
+    struct {
+        int start;
+        int length;
+    }faceSets[fsCount] <bgcolor=cDkPurple>;
+    if(vertCount > 65535) uint idx[triCount * 3];
+    else ushort idx[triCount * 3] <bgcolor=cDkAqua>;
+    if(format >= 58) Vert28 verts[vertCount];
+    else if(format >= 56) Vert24 verts[vertCount];
+    else Vert20 verts(9)[vertCount];
 };
+
+struct Model (int version) {
+    char magic[4];
+    Assert(magic == "DOLm");
+    short unk1;
+    byte meshCount;
+    short fsCount;
+    int format;
+
+    struct {
+        int triCount;
+        int vertCount;
+    } meshData[meshCount];
+
+    local int i;
+    for(i = 0; i < meshCount; i++) {
+        Mesh mesh(format, meshData[i].triCount, meshData[i].vertCount, fsCount);
+    }
+
+    struct {
+        short a;
+        if(format >= 58) int b;
+        float bbox[6] <bgcolor=cDkRed>;
+    } fsbbox[fsCount];
+
+};
+
+
+byte version;
+float bbox[6] <bgcolor=cDkRed>;
+
+
+if(version >= 9) {
+    short unk1;
+    short unk2;
+    short unk3;
+
+    Model model(version);
+    Model groundModel(version);
+
+
+
+} else {
+    short numConnects;
+    int vertCount;
+    int triCount;
+    short numUnk;
+    int numGroundVerts;
+    int numGroundIdx;
+    byte flags;
+    byte zero;
+
+    struct {
+        byte unk[34];
+    } connects[numConnects];
+
+
+
+    Vert20 verts(version)[vertCount];
+    
+    
+    if(vertCount > 65535) {
+        uint idx[triCount * 3] <bgcolor=cDkAqua>;
+    } else {
+        ushort idx[triCount * 3] <bgcolor=cDkAqua>;
+    }
+
+}
+
