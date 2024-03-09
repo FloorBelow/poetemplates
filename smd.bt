@@ -10,50 +10,75 @@
 //  ID Bytes: 
 //   History: 
 //------------------------------------------------
+
+
+#include "poemesh.bt"
+
+typedef struct {
+    uint offset;
+    uint nameLength;
+    local wstring name;
+} ShapeInfo <read=ShapeInfoRead>;
+
+string ShapeInfoRead(ShapeInfo& s) {
+    return s.name;
+}
+
 byte version;
 if(version == 3) {
     byte four;
     ushort shapeCount;
-    byte unk[41];
-    uint triCount;
-    uint vertCount;
-    //uint64 unk2;
-    struct {
-        uint start;
-        uint length;
-    }shapes[shapeCount];} 
-else {
+    int unk1;
+    float bbox[6];
+    Model model;
+
+    
+} else {
     uint triCount;
     uint vertCount;
     byte four;
     ushort shapeCount;
     uint shapeNamesLength;
     float bbox[6];
-    struct {
-        uint start;
-        uint length;
-    }shapes[shapeCount];
+    ShapeInfo shapes[shapeCount] <optimize=false>;
     if(version == 2) uint unk;
-    char shapeNames[shapeNamesLength];
-}
+    local int i;
+    for(i = 0; i < shapeCount; i++) {
+        shapes[i].name = ReadWString(FTell(), shapes[i].nameLength / 2);
+        FSkip(shapes[i].nameLength);
+   }
+    //wchar_t shapeNames[shapeNamesLength/2];
 
-if(vertCount < 65535) {
-    ushort idx[triCount * 3] <bgcolor=cDkAqua>;
-} else {
-    uint idx[triCount * 3] <bgcolor=cDkAqua>;
-}
-
-struct {
-    float pos[3] <bgcolor=cDkRed>;
-    uint64 unk1;
-    uint uv <bgcolor=cDkGreen>;
-    uint64 unk2 <bgcolor=cDkAqua>;
-} verts[vertCount];
-
-uint shapeNameLengths[shapeCount];
-local int i;
-for(i = 0; i < shapeCount; i++) {
+    if(vertCount < 65535) {
+        ushort idx[triCount * 3] <bgcolor=cDkAqua>;
+    } else {
+        uint idx[triCount * 3] <bgcolor=cDkAqua>;
+    }
+    
     struct {
-        char name[shapeNameLengths[i]];
-    } shapeNames;
+        float x <bgcolor=cDkRed>;
+        float y <bgcolor=cDkRed>;
+        float z <bgcolor=cDkRed>;
+        uint64 unk1;
+        hfloat u <bgcolor=cDkGreen>;
+        hfloat v <bgcolor=cDkGreen>;
+        ubyte bone0;
+        ubyte bone1;
+        ubyte bone2;
+        ubyte bone3;
+        ubyte weight0;
+        ubyte weight1;
+        ubyte weight2;
+        ubyte weight3;
+    
+    } verts[vertCount];
+    
+    //uint shapeNameLengths[shapeCount];
+    //local int i;
+    //for(i = 0; i < shapeCount; i++) {
+    //    struct {
+    //        char name[shapeNameLengths[i]];
+    //    } shapeNames;
+    //}
 }
+

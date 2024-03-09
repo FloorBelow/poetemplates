@@ -1,72 +1,84 @@
-//------------------------------------------------
-//--- 010 Editor v12.0.1 Binary Template
-//
-//      File: 
-//   Authors: 
-//   Version: 
-//   Purpose: 
-//  Category: 
-// File Mask: 
-//  ID Bytes: 
-//   History: 
-//------------------------------------------------
+#include "poemesh.bt"
+
+typedef struct {
+    uint nameOffset;
+    uint matOffset;
+    local wstring name;
+    local wstring material;
+} ShapeInfo9 <read=ShapeInfo9Read>;
+
+string ShapeInfo9Read(ShapeInfo9& s) {
+    return s.name + " " + s.material;
+}
+
+typedef struct {
+    uint nameOffset;
+    uint matOffset;
+    uint triOffset;
+    local wstring name;
+    local wstring material;
+} ShapeInfo <read=ShapeInfoRead>;
+
+string ShapeInfoRead(ShapeInfo& s) {
+    string str;
+    SPrintf(str, "%s %s %d", s.name, s.material, s.triOffset);
+    return str;
+}
+
+
+
 byte version;
 
-if(version == 9) {
-
-int unk;
-short unk;
+if(version < 9) {
+    int triCount <bgcolor=cBlue>;
+    int vertCountQ <bgcolor=cBlue>;
+}
+ushort shapeCount;
+byte unk1Count;
+ushort unk2Count;
+byte unk3Count;
 float bbox[6] <bgcolor=cDkRed>;
-char magicmebbe[4] <bgcolor=cBlack>;
-short count1;
-byte count2;
-short shapeCount <bgcolor=cBlue>;
-int unk1;
-int triCount <bgcolor=cBlue>;
-int vertCountQ <bgcolor=cBlue>;
-int unk4;
-int unk5;
-struct {
-    int idxOffset;
-    int idxCount;
-} shapes[shapeCount] <bgcolor=cGreen>;
+
 //Assert(idxCount == triCount * 3);
 
 
-} else {
+if(version == 9) {
+    Model model;
+    ShapeInfo9 shapes[shapeCount] <optimize=false>;
+} else {  
+    if(version == 8) {
+        int unk2;
+    };
+    
+    ShapeInfo shapes[shapeCount] <optimize=false>;
 
-int triCount <bgcolor=cBlue>;
-int vertCountQ <bgcolor=cBlue>;
-short shapeCount <bgcolor=cBlue>;
-int unk;
-float bbox[6] <bgcolor=cDkRed>;
-
-if(version == 8) {
-    int unk2;
-};
-
-struct {
-    int a;
-    int b;
-    int c;
-} shapes[shapeCount];
-
-
-
-
+    local uint idxCount = triCount * 3;
+    
+    //if(triCount > 21844) uint idx[triCount*3] <bgcolor=cDkAqua>;
+    ushort idx[triCount*3] <bgcolor=cDkAqua>;
+    
+    struct {
+        float x <bgcolor=cDkRed>;
+        float y <bgcolor=cDkRed>;
+        float z <bgcolor=cDkRed>;
+        uint64 unk;
+        hfloat u <bgcolor=cDkYellow>;
+        hfloat v <bgcolor=cDkYellow>;
+    } verts[vertCountQ];
 
 }
 
-local uint idxCount = triCount * 3;
-
-//if(triCount > 21844) uint idx[triCount*3] <bgcolor=cDkAqua>;
-ushort idx[triCount*3] <bgcolor=cDkAqua>;
 
 struct {
-    float x <bgcolor=cDkRed>;
-    float y <bgcolor=cDkRed>;
-    float z <bgcolor=cDkRed>;
-    uint64 unk;
-    hfloat u <bgcolor=cDkYellow>;
-    hfloat v <bgcolor=cDkYellow>;
-} verts[vertCountQ];
+    byte unk[6];
+} unk1[unk1Count];
+
+Vector3 unk2[unk2Count];
+
+int nameTableLength;
+
+local int i;
+for(i = 0; i < shapeCount; i++) {
+    shapes[i].name = ReadWString(FTell() + shapes[i].nameOffset  * 2);
+    shapes[i].material = ReadWString(FTell() + shapes[i].matOffset * 2);
+}
