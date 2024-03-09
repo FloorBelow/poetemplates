@@ -41,7 +41,8 @@ string vec4Read(vec4& v) {
 
 
 typedef struct {
-    short unk1;
+    byte sibling;
+    byte child;
     vec4 a;
     vec4 b;
     vec4 c;
@@ -68,7 +69,10 @@ string LightRead(Light& light) {
 
 
 typedef struct (int version){
-    byte unk[4];
+    byte tracks;
+    byte unk1;
+    byte framerate;
+    byte unk2;
     if(version == 11) {
         byte unk3;
     }
@@ -76,7 +80,7 @@ typedef struct (int version){
     if(version == 11) {
         byte parentNameLength;
     }
-    byte unk2[8];
+    byte unk4[8];
     char name[nameLength] <bgcolor=cDkAqua>;
     if(version == 11) {
         char parentName[parentNameLength] <bgcolor=cAqua>;
