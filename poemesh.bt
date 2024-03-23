@@ -10,6 +10,61 @@ string ReadVector3(Vector3& vec) {
     return str;
 }
 
+typedef struct {
+    float x1 <bgcolor=cDkRed>;
+    float y1 <bgcolor=cDkRed>;
+    float z1 <bgcolor=cDkRed>;
+    float x2 <bgcolor=cDkRed>;
+    float y2 <bgcolor=cDkRed>;
+    float z2 <bgcolor=cDkRed>;
+} BBox <read=BBoxRead>;
+
+string BBoxRead(BBox& b) {
+    string str;
+    SPrintf(str, "(%.2f, %.2f, %.2f) (%.2f, %.2f, %.2f)", b.x1, b.y1, b.z1, b.x2, b.y2, b.z2);
+    return str;
+}
+
+typedef struct (byte version) {
+    float x <bgcolor=cDkGreen>;
+    float y <bgcolor=cDkGreen>;
+    float z <bgcolor=cDkGreen>;
+    int norm;
+    //if(version < 9) 
+    int tan;
+    if(version != 48) { 
+        hfloat u <bgcolor=cDkBlue>;
+        hfloat v <bgcolor=cDkBlue>;
+    }
+    if(version == 57) {
+        hfloat u2;
+        hfloat v2;   
+    }
+    if (version == 58) {
+        int unk;    
+    }
+    if (version == 60 || version == 61) {
+        ubyte b1;
+        ubyte b2;
+        ubyte b3;
+        ubyte b4;
+        ubyte w1;
+        ubyte w2;
+        ubyte w3;
+        ubyte w4;
+    }
+    if (version == 61) {
+        int unk;    
+    }
+    
+} Vert <read=VertRead>;
+
+string VertRead(Vert& v) {
+    string s;
+    SPrintf(s, "%4.2f %4.2f %4.2f    (%.2f %1.2f)", v.x, v.y, v.z, v.u, v.v);
+    return s;
+}
+
 typedef struct (byte version){
     float x <bgcolor=cDkGreen>;
     float y <bgcolor=cDkGreen>;
@@ -84,17 +139,36 @@ string Vert32Read(Vert32& v) {
 }
 
 
-struct Mesh(int format, int triCount, int vertCount, int fsCount) {
+typedef struct {
+    float x <bgcolor=cDkGreen>;
+    float y <bgcolor=cDkGreen>;
+    float z <bgcolor=cDkGreen>;
+    hfloat a;
+    hfloat b;
+    hfloat c;
+    hfloat d;
+    hfloat u;
+    hfloat v;
+    hfloat u2;
+    hfloat v2;
+} Vert57 <read=Vert57Read>;
+
+string Vert57Read(Vert57& v) {
+    string s;
+    SPrintf(s, "%4.0f %4.0f %4.0f | %f %f", v.x, v.y, v.z, v.u, v.v);
+    return s;
+}
+
+struct Mesh(int format, int triCount, int vertCount, int shapeCount) {
     struct {
         int start;
         int length;
-    }faceSets[fsCount] <bgcolor=cDkPurple>;
+    }shapes[shapeCount] <bgcolor=cDkPurple>;
     if(vertCount > 65535) uint idx[triCount * 3];
     else ushort idx[triCount * 3] <bgcolor=cDkAqua>;
-    if(format >= 60) Vert32 verts[vertCount];
-    else if(format >= 58) Vert28 verts[vertCount];
-    else if(format >= 56) Vert24 verts[vertCount];
-    else Vert20 verts(9)[vertCount];
+    local int i;
+    for(i = 0; i < vertCount; i++)
+        Vert verts(format);
 };
 
 
@@ -103,7 +177,7 @@ struct Model {
     Assert(magic == "DOLm");
     short unk1;
     byte meshCount;
-    short fsCount;
+    short shapeCount;
     int format;
 
     struct {
@@ -113,7 +187,7 @@ struct Model {
 
     local int i;
     for(i = 0; i < meshCount; i++) {
-        Mesh mesh(format, meshData[i].triCount, meshData[i].vertCount, fsCount);
+        Mesh mesh(format, meshData[i].triCount, meshData[i].vertCount, shapeCount);
     }
 
     //struct (int version, int ground){

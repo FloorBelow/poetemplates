@@ -25,7 +25,9 @@ string ShapeInfoRead(ShapeInfo& s) {
     return str;
 }
 
-
+struct Unk1{
+    ubyte unk[6];
+};
 
 byte version;
 
@@ -51,9 +53,8 @@ if(version == 9) {
     };
     
     ShapeInfo shapes[shapeCount] <optimize=false>;
+    Unk1 unk1[unk1Count];
 
-    local uint idxCount = triCount * 3;
-    
     //if(triCount > 21844) uint idx[triCount*3] <bgcolor=cDkAqua>;
     ushort idx[triCount*3] <bgcolor=cDkAqua>;
     
@@ -68,10 +69,9 @@ if(version == 9) {
 
 }
 
-
-struct {
-    byte unk[6];
-} unk1[unk1Count];
+if(version == 9) {
+    Unk1 unk1[unk1Count];
+}
 
 Vector3 unk2[unk2Count];
 
