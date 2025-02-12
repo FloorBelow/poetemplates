@@ -15,8 +15,8 @@
 #include "poemesh.bt"
 
 typedef struct {
-    uint offset;
     uint nameLength;
+    uint offset;
     local wstring name;
 } ShapeInfo <read=ShapeInfoRead>;
 
@@ -32,7 +32,13 @@ if(version == 3) {
     float bbox[6];
     Model model;
 
-    
+    uint shapeNameLengths[shapeCount];
+    local int i;
+    for(i = 0; i < shapeCount; i++) {
+        struct {
+            char name[shapeNameLengths[i]];
+        } shapeNames;
+    }
 } else {
     uint triCount;
     uint vertCount;
@@ -40,8 +46,8 @@ if(version == 3) {
     ushort shapeCount;
     uint shapeNamesLength;
     float bbox[6];
-    ShapeInfo shapes[shapeCount] <optimize=false>;
     if(version == 2) uint unk;
+    ShapeInfo shapes[shapeCount] <optimize=false>;
     local int i;
     for(i = 0; i < shapeCount; i++) {
         shapes[i].name = ReadWString(FTell(), shapes[i].nameLength / 2);
@@ -73,12 +79,6 @@ if(version == 3) {
     
     } verts[vertCount];
     
-    //uint shapeNameLengths[shapeCount];
-    //local int i;
-    //for(i = 0; i < shapeCount; i++) {
-    //    struct {
-    //        char name[shapeNameLengths[i]];
-    //    } shapeNames;
-    //}
+
 }
 

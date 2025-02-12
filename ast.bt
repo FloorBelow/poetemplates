@@ -69,20 +69,20 @@ string LightRead(Light& light) {
 
 
 typedef struct (int version){
-    byte tracks;
+    ubyte tracks;
     byte unk1;
     byte framerate;
     byte unk2;
-    if(version == 11) {
+    if(version > 10) {
         byte unk3;
     }
     byte nameLength;
-    if(version == 11) {
+    if(version > 10) {
         byte parentNameLength;
     }
     byte unk4[8];
     char name[nameLength] <bgcolor=cDkAqua>;
-    if(version == 11) {
+    if(version > 10) {
         char parentName[parentNameLength] <bgcolor=cAqua>;
     }
 }Animation <read=AnimationRead>;

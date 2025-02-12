@@ -43,7 +43,7 @@ typedef struct (byte version) {
     if (version == 58) {
         int unk;    
     }
-    if (version == 60 || version == 61) {
+    if (version == 60 || version == 61 || version == 62) {
         ubyte b1;
         ubyte b2;
         ubyte b3;
@@ -53,8 +53,11 @@ typedef struct (byte version) {
         ubyte w3;
         ubyte w4;
     }
-    if (version == 61) {
+    if (version == 61 || version == 62) {
         int unk;    
+    }
+    if(version == 120) {
+        byte unk2[4];  
     }
     
 } Vert <read=VertRead>;
@@ -166,16 +169,22 @@ struct Mesh(int format, int triCount, int vertCount, int shapeCount) {
     }shapes[shapeCount] <bgcolor=cDkPurple>;
     if(vertCount > 65535) uint idx[triCount * 3];
     else ushort idx[triCount * 3] <bgcolor=cDkAqua>;
-    local int i;
-    for(i = 0; i < vertCount; i++)
-        Vert verts(format);
+    Vert verts(format)[vertCount];
+    if(format == 120) {
+        struct {
+            BBox bbox;
+            int unk1;
+            int unk2;
+            int zero;
+        } shapes2[shapeCount] <bgcolor=cDkPurple>;
+    }
 };
 
 
 struct Model {
     char magic[4];
     Assert(magic == "DOLm");
-    short unk1;
+    short version;
     byte meshCount;
     short shapeCount;
     int format;
@@ -189,7 +198,10 @@ struct Model {
     for(i = 0; i < meshCount; i++) {
         Mesh mesh(format, meshData[i].triCount, meshData[i].vertCount, shapeCount);
     }
-
+    
+    if (version == 4) {
+        int unk[meshCount];
+    }
     //struct (int version, int ground){
     //    short a;
     //    if(version >= 13 && ground == 0) int b;

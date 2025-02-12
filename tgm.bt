@@ -12,6 +12,8 @@ if(version >= 9) {
 
     Model model;
     
+    //if(version >= 14) uint unk4[model.meshCount];
+    
     struct {
         ushort unk1;
         if(version >= 10) ushort unk2;
